@@ -5,6 +5,8 @@ from typing import List
 
 import numpy as np
 # save np.load
+from utils import sigmoid, relu
+
 np_load_old = np.load
 
 # modify the default parameters of np.load
@@ -18,15 +20,18 @@ class Network:
 
     def __init__(self, layers: List[Layer]):
         self.layers = layers
-        self.current_layer = 0
+        self.current_layer = 1
         self.weights = self.init_weights()
         self.biases = self.init_biases()
 
     def advance_layer(self):
-        pass
+        self.layers[self.current_layer].nodes_data = relu((self.weights[self.current_layer] @
+                                                           self.layers[self.current_layer - 1].nodes_data) +
+                                                          self.biases[self.current_layer])
+        self.current_layer += 1
 
-    def output(self):
-        pass
+    def predict(self):
+        print("The prediction is: {}".format(np.argmax(self.layers[-1].nodes_data)))
 
     def init_weights(self) -> np.ndarray:
         if not os.path.exists(self.WEIGHT_PATH):

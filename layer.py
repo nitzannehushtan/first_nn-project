@@ -11,7 +11,7 @@ class Layer:
             self.nodes = [Node(random(), ind, layer_ind) for ind in range(hidden)]
         else:
             self.nodes = nodes
-        self.nodes_data = np.array([node.data for node in self.nodes])
+        self.nodes_data = np.array([node.data for node in self.nodes]).reshape(-1)
         self.layer_ind = layer_ind
         self.prev_layer = prev_layer
 

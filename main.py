@@ -6,13 +6,12 @@ import cv2 as cv
 from layer import Layer
 from network import Network
 from node import Node
-from utils import sigmoid
 
 DATA_DIR = "C:\\Nitzan\\nn-project\\data"
 
 
-def display_image(image):
-    cv.imshow("Image", image)
+def display_image(pixels):
+    cv.imshow("Image", pixels)
     cv.waitKey(0)
 
 
@@ -25,7 +24,7 @@ def get_pixels_as_nodes(raw_image) -> List[Node]:
     ind = 0
     for row in raw_image:
         for pixel in row:
-            nodes.append(Node(sigmoid(pixel), ind, 0))
+            nodes.append(Node(pixel, ind, 0))
             ind += 1
     return nodes
 
@@ -38,7 +37,7 @@ if __name__ == '__main__':
 
     image = test_samples[0]
 
-    layer_0 = Layer(get_pixels_as_nodes(image), 0)
+    layer_0 = Layer(image, 0)
     layer_1 = Layer(layer_ind=1, prev_layer=layer_0, hidden=10)
     layer_2 = Layer(layer_ind=2, prev_layer=layer_1, hidden=10)
 
@@ -46,7 +45,8 @@ if __name__ == '__main__':
 
     predictor = Network([layer_0, layer_1, layer_2, final_layer])
 
-    # while predictor.current_layer < len(predictor.layers):
-    #     predictor.layers[predictor.current_layer].print_layer()
-    #     predictor.advance_layer()
+    while predictor.current_layer < len(predictor.layers):
+        predictor.advance_layer()
+
+    predictor.predict()
 
